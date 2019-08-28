@@ -28,6 +28,7 @@ public class NotificationDetails {
     private static final String ONGOING = "ongoing";
     private static final String STYLE = "style";
     private static final String ICON = "icon";
+    private static final String DEFAULT_ICON = "defaultIcon";
     private static final String PRIORITY = "priority";
     private static final String PLAY_SOUND = "playSound";
     private static final String SOUND = "sound";
@@ -278,13 +279,14 @@ public class NotificationDetails {
         }
         Boolean bot = (Boolean) person.get(BOT);
         String icon = (String) person.get(ICON);
+        String defaultIcon = (String) person.get(DEFAULT_ICON);
         Integer iconSourceIndex = (Integer) person.get(ICON_SOURCE);
         IconSource iconSource = iconSourceIndex == null ? null : IconSource.values()[iconSourceIndex];
         Boolean important = (Boolean) person.get(IMPORTANT);
         String key = (String) person.get(KEY);
         String name = (String) person.get(NAME);
         String uri = (String) person.get(URI);
-        return new PersonDetails(bot, icon, iconSource, important, key, name, uri);
+        return new PersonDetails(bot, icon, defaultIcon, iconSource, important, key, name, uri);
     }
 
     @SuppressWarnings("unchecked")

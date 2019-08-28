@@ -339,14 +339,18 @@ public class FlutterLocalNotificationsPlugin implements MethodCallHandler, Plugi
         return bitmap;
     }
 
-    private static IconCompat getIconFromSource(Context context, String iconPath, IconSource iconSource) {
+    private static IconCompat getIconFromSource(Context context, String iconPath, String defaultIconPath, IconSource iconSource) {
         IconCompat icon = null;
         switch (iconSource) {
             case Drawable:
                 icon = IconCompat.createWithResource(context, getDrawableResourceId(context, iconPath));
                 break;
             case FilePath:
-                icon = IconCompat.createWithBitmap(getCroppedBitmap(BitmapFactory.decodeFile(iconPath)));
+                Bitmap bitmap = BitmapFactory.decodeFile(iconPath);
+                if (bitmap == null) {
+                    bitmap = BitmapFactory.decodeFile(defaultIconPath);
+                }
+                icon = IconCompat.createWithBitmap(getCroppedBitmap(bitmap));
                 break;
             case ContentUri:
                 icon = IconCompat.createWithContentUri(iconPath);
@@ -535,7 +539,7 @@ public class FlutterLocalNotificationsPlugin implements MethodCallHandler, Plugi
         Person.Builder personBuilder = new Person.Builder();
         personBuilder.setBot(BooleanUtils.getValue(personDetails.bot));
         if (personDetails.icon != null && personDetails.iconBitmapSource != null) {
-            personBuilder.setIcon(getIconFromSource(context, personDetails.icon, personDetails.iconBitmapSource));
+            personBuilder.setIcon(getIconFromSource(context, personDetails.icon, personDetails.defaultIcon, personDetails.iconBitmapSource));
         }
         personBuilder.setImportant(BooleanUtils.getValue(personDetails.important));
         if (personDetails.key != null) {
